@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    public float MovementSpeed = 1.0f;
+    public Rigidbody2D Rigidbody;
 
+    public float MovementSpeed = 1.0f;
     public float SpaceResistance = 0.5f;
 
-    public Rigidbody2D Rigidbody;
+    [Space]
+    public GameObject ProjectilePrefab;
+    public float ProjectileOffset = 1.0f;
 
     private Vector2 _moveDirection;
 
@@ -24,10 +27,16 @@ public class PlayerController : MonoBehaviour {
 
     private void HandleInput() {
 
+        // move
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
         _moveDirection = new Vector2(moveX, moveY).normalized;
+
+        // shoot projectile
+        if (Input.GetButtonDown("Fire1")) {
+            Instantiate(ProjectilePrefab, new Vector2(gameObject.transform.position.x + ProjectileOffset, gameObject.transform.position.y), Quaternion.identity);
+        }
     }
 
     private void Move() {
