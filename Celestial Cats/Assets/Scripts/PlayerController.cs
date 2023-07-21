@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour {
 
     public float MovementSpeed = 1.0f;
 
+    public float SpaceResistance = 0.5f;
+
     public Rigidbody2D Rigidbody;
 
     private Vector2 _moveDirection;
@@ -29,6 +31,6 @@ public class PlayerController : MonoBehaviour {
     }
 
     private void Move() {
-        Rigidbody.velocity = new Vector2(_moveDirection.x * MovementSpeed, _moveDirection.y * MovementSpeed);
+        Rigidbody.velocity = new Vector2(_moveDirection.x * MovementSpeed - SpaceResistance, _moveDirection.y * MovementSpeed);
     }
 }

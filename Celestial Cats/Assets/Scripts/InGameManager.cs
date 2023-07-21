@@ -9,6 +9,8 @@ public class InGameManager : MonoBehaviour {
 
     public void BeginGame() {
 
+        Cursor.visible = false;
+
         Instantiate(PlayerPrefab, new Vector2(PlayerSpawnPoint.transform.position.x, PlayerSpawnPoint.transform.position.y), Quaternion.identity);
     }
 }

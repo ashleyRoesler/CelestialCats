@@ -120,4 +120,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MovementSpeed: 5
+  SpaceResistance: 2
   Rigidbody: {fileID: 5307395678811388317}
