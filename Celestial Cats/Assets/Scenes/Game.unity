@@ -169,7 +169,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerSpawnPoint: {fileID: 628992904}
   PlayerPrefab: {fileID: 6007637534038070112, guid: 6144c4e43e65515408353bac8de6ce6b, type: 3}
-  UniversePrefab: {fileID: 4487273729108077730, guid: 02210c24ad617e2459a6ab7151641efa, type: 3}
+  UniverseBits:
+  - Prefab: {fileID: 4487273729108077730, guid: 02210c24ad617e2459a6ab7151641efa, type: 3}
+    SpawnChance: 40
+  - Prefab: {fileID: 4487273729108077730, guid: f6a1e6503d285644bae7c63cb886b560, type: 3}
+    SpawnChance: 10
+  - Prefab: {fileID: 4487273729108077730, guid: 317ee38175183634d96e2d12e4f5cf8c, type: 3}
+    SpawnChance: 20
+  - Prefab: {fileID: 4487273729108077730, guid: c47be7a2bf231e24f836d763d554cf44, type: 3}
+    SpawnChance: 10
+  - Prefab: {fileID: 4487273729108077730, guid: 6783e948b83062440b55e9b0cb44cd77, type: 3}
+    SpawnChance: 20
   UniverseSpawnRate: 1
 --- !u!1 &628992904
 GameObject:
@@ -572,9 +582,9 @@ RectTransform:
   m_Father: {fileID: 2036107040}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 660, y: 334}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -102, y: -42}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1383860859

@@ -1,10 +1,12 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
 // https://docs.unity3d.com/ScriptReference/Random.Range.html
 // https://docs.unity3d.com/ScriptReference/Camera.ScreenToWorldPoint.html
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.InvokeRepeating.html
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.CancelInvoke.html
+// https://youtu.be/XyNb41Zpeuo
 
 /*
  * Screenspace:
@@ -23,7 +25,7 @@ public class InGameManager : MonoBehaviour {
     public GameObject PlayerPrefab;
 
     [Space]
-    public GameObject UniversePrefab;
+    public List<UniverseBit> UniverseBits = new();
     public float UniverseSpawnRate = 1.0f;
 
     private Camera _mainCamera;
@@ -51,10 +53,38 @@ public class InGameManager : MonoBehaviour {
         float spawnX = _cameraUpperRight.x + 10.0f;
         float spawnY = Random.Range(_cameraBottomRight.y, _cameraUpperRight.y);
 
-        Instantiate(UniversePrefab, new Vector2(spawnX, spawnY), Quaternion.identity);
+        // randomly select universe bit to spawn
+        float random = Random.Range(0f, 1f);
+        float numForAdding = 0f;
+        float total = 0f;
+
+        int spawnIndex = 0;
+
+        foreach (UniverseBit b in UniverseBits) {
+            total += b.SpawnChance;
+        }
+
+        for (int i = 0; i < UniverseBits.Count; i++) {
+
+            if (UniverseBits[i].SpawnChance / total + numForAdding >= random) {
+                spawnIndex = i;
+                break;
+            }
+            else {
+                numForAdding += UniverseBits[i].SpawnChance / total;
+            }
+        }
+
+        Instantiate(UniverseBits[spawnIndex].Prefab, new Vector2(spawnX, spawnY), Quaternion.identity);
     }
 
     public void EndGame() {
         CancelInvoke();
     }
+}
+
+[System.Serializable]
+public class UniverseBit {
+    public GameObject Prefab;
+    public float SpawnChance = 100.0f;
 }
