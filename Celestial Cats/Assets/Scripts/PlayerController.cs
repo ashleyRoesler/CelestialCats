@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour {
 
     private Vector2 _moveDirection;
 
+    private float PowerupProgress = 0f;
+
+    public event System.Action<float> PowerupProgressChanged;
+
     // note to self: Update depends on framerate, good for processing input
     private void Update() {
         HandleInput();
@@ -41,5 +45,17 @@ public class PlayerController : MonoBehaviour {
 
     private void Move() {
         Rigidbody.velocity = new Vector2(_moveDirection.x * MovementSpeed - SpaceResistance, _moveDirection.y * MovementSpeed);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        
+        // check if the other thing is a piece of the universe
+        // if so, increase powerup progress and eat the universe
+        if (collision.gameObject.GetComponent<PieceOfTheUniverse>()) {
+            PowerupProgress++;
+            Destroy(collision.gameObject);
+
+            PowerupProgressChanged?.Invoke(PowerupProgress);
+        }
     }
 }

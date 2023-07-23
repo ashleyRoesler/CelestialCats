@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4487273729108077731}
   - component: {fileID: 4487273729108077729}
   - component: {fileID: 5958192573508843804}
+  - component: {fileID: 2882723998176298290}
   m_Layer: 0
   m_Name: Magic
   m_TagString: Untagged
@@ -96,12 +97,12 @@ Rigidbody2D:
   m_GameObject: {fileID: 4487273729108077730}
   m_BodyType: 1
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
+  m_UseFullKinematicContacts: 1
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -120,4 +121,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 4487273729108077729}
-  MovementSpeed: -3
+  MovementSpeed: -8
+--- !u!58 &2882723998176298290
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4487273729108077730}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
