@@ -15,9 +15,11 @@ public class PlayerController : MonoBehaviour {
 
     private Vector2 _moveDirection;
 
+    private SpecialAbility _currentSpecialAbility = SpecialAbility.None;
     private float PowerupProgress = 0f;
 
     public event System.Action<float> PowerupProgressChanged;
+    public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
     // note to self: Update depends on framerate, good for processing input
     private void Update() {
@@ -52,10 +54,31 @@ public class PlayerController : MonoBehaviour {
         // check if the other thing is a piece of the universe
         // if so, increase powerup progress and eat the universe
         if (collision.gameObject.GetComponent<PieceOfTheUniverse>()) {
-            PowerupProgress++;
-            Destroy(collision.gameObject);
+            
+            // check if star
+            if (collision.gameObject.name.ToLower().Contains("star") && _currentSpecialAbility != SpecialAbility.Star) {
+                _currentSpecialAbility = SpecialAbility.Star;
+                SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
+            }
 
-            PowerupProgressChanged?.Invoke(PowerupProgress);
+            // check if magic
+            else if (collision.gameObject.name.ToLower().Contains("magic") && _currentSpecialAbility != SpecialAbility.Blast) {
+                _currentSpecialAbility = SpecialAbility.Blast;
+                SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
+            }
+            
+            else {
+                PowerupProgress++;
+                PowerupProgressChanged?.Invoke(PowerupProgress);
+            }
+            
+            Destroy(collision.gameObject);
         }
     }
+}
+
+public enum SpecialAbility {
+    None,
+    Star,
+    Blast
 }
