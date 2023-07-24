@@ -1,7 +1,7 @@
 using UnityEngine;
-using System.Collections;
 
-// tutorial: https://youtu.be/u8tot-X_RBI
+// https://youtu.be/u8tot-X_RBI
+// https://www.techwithsach.com/post/how-to-add-a-simple-countdown-timer-in-unity
 
 public class Player : MonoBehaviour {
 
@@ -97,7 +97,7 @@ public class Player : MonoBehaviour {
             }
 
             // check if magic
-            else if (collision.gameObject.name.ToLower().Contains("magic") && _currentSpecialAbility != SpecialAbility.Blast) {
+            else if (collision.gameObject.name.ToLower().Contains("satellite") && _currentSpecialAbility != SpecialAbility.Blast) {
                 _currentSpecialAbility = SpecialAbility.Blast;
                 SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
             }

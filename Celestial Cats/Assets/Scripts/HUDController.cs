@@ -45,9 +45,6 @@ public class HUDController : MonoBehaviour {
     private void Player_SpecialAbilityChanged(SpecialAbility newSpecialAbility) {
 
         switch (newSpecialAbility) {
-            case SpecialAbility.None:
-                SpecialAbilityIcon.gameObject.SetActive(false);
-                break;
             case SpecialAbility.Star:
                 SpecialAbilityIcon.sprite = Star;
                 SpecialAbilityIcon.gameObject.SetActive(true);
@@ -56,6 +53,7 @@ public class HUDController : MonoBehaviour {
                 SpecialAbilityIcon.sprite = Blast;
                 SpecialAbilityIcon.gameObject.SetActive(true);
                 break;
+            case SpecialAbility.None:
             default:
                 SpecialAbilityIcon.gameObject.SetActive(false);
                 break;

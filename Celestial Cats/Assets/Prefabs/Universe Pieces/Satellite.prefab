@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5958192573508843804}
   - component: {fileID: 2882723998176298290}
   m_Layer: 0
-  m_Name: Magic
+  m_Name: Satellite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
