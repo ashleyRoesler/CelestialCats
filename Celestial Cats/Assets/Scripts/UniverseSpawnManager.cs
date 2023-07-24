@@ -50,7 +50,7 @@ public class UniverseSpawnManager : MonoBehaviour {
         Manager.GameEnded -= Manager_GameEnded;
     }
 
-    private void Manager_GameBegan(PlayerController player) {
+    private void Manager_GameBegan(Player player) {
         InvokeRepeating(nameof(SpawnTheUniverse), 0.0f, UniverseSpawnRate);
     }
 

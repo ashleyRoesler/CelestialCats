@@ -8,16 +8,16 @@ public class InGameManager : MonoBehaviour {
     public GameObject PlayerSpawnPoint;
     public GameObject PlayerPrefab;
 
-    public event System.Action<PlayerController> GameBegan;
+    public event System.Action<Player> GameBegan;
     public event System.Action GameEnded;
 
-    private PlayerController _player;
+    private Player _player;
 
     public void BeginGame() {
 
         Cursor.visible = false;
 
-        _player = Instantiate(PlayerPrefab, new Vector2(PlayerSpawnPoint.transform.position.x, PlayerSpawnPoint.transform.position.y), Quaternion.identity).GetComponent<PlayerController>();
+        _player = Instantiate(PlayerPrefab, new Vector2(PlayerSpawnPoint.transform.position.x, PlayerSpawnPoint.transform.position.y), Quaternion.identity).GetComponent<Player>();
 
         GameBegan?.Invoke(_player);
     }

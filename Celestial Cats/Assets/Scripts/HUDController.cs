@@ -14,7 +14,7 @@ public class HUDController : MonoBehaviour {
     public TextMeshProUGUI PowerupProgressText;
     public Image SpecialAbilityIcon;
 
-    private PlayerController _player;
+    private Player _player;
 
     private void Awake() {
         Manager.GameBegan += Manager_GameBegan;
@@ -32,7 +32,7 @@ public class HUDController : MonoBehaviour {
         }
     }
 
-    private void Manager_GameBegan(PlayerController player) {
+    private void Manager_GameBegan(Player player) {
         _player = player;
         _player.PowerupProgressChanged += Player_PowerupProgressChanged;
         _player.SpecialAbilityChanged += Player_SpecialAbilityChanged;

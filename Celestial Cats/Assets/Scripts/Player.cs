@@ -1,17 +1,26 @@
 using UnityEngine;
+using System.Collections;
 
 // tutorial: https://youtu.be/u8tot-X_RBI
 
-public class PlayerController : MonoBehaviour {
+public class Player : MonoBehaviour {
 
     public Rigidbody2D Rigidbody;
+    public HealthComponent Health;
 
-    public float MovementSpeed = 1.0f;
+    [Space]
+    public float MovementSpeed = 1f;
     public float SpaceResistance = 0.5f;
+    private float _currentMovementSpeed = 1f;
 
     [Space]
     public GameObject ProjectilePrefab;
-    public float ProjectileOffset = 1.0f;
+    public float ProjectileOffset = 1f;
+
+    [Space]
+    public float StarDuration = 4f;
+    public float StarSpeed = 8f;
+    private float _currentStarDuration = 0f;
 
     private Vector2 _moveDirection;
 
@@ -21,9 +30,30 @@ public class PlayerController : MonoBehaviour {
     public event System.Action<float> PowerupProgressChanged;
     public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
+    private void Awake() {
+        _currentMovementSpeed = MovementSpeed;
+    }
+
     // note to self: Update depends on framerate, good for processing input
     private void Update() {
         HandleInput();
+
+        // start Star special ability
+        if (_currentStarDuration == StarDuration) {
+            Health.CanBeDamaged = false;
+            _currentMovementSpeed = StarSpeed;
+        }
+
+        // update Star duration
+        if (_currentStarDuration > 0f) {
+
+            _currentStarDuration -= Time.deltaTime;
+
+            if (_currentStarDuration <= 0f) {
+                Health.CanBeDamaged = true;
+                _currentMovementSpeed = MovementSpeed;
+            }
+        }
     }
 
     // note to self: FixedUpdate happens a set amount of times per frame, good for physics calculations
@@ -43,10 +73,15 @@ public class PlayerController : MonoBehaviour {
         if (Input.GetButtonDown("Fire1")) {
             Instantiate(ProjectilePrefab, new Vector2(gameObject.transform.position.x + ProjectileOffset, gameObject.transform.position.y), Quaternion.identity);
         }
+
+        // use special ability
+        if (Input.GetButtonDown("Fire2") && _currentSpecialAbility != SpecialAbility.None) {
+            UseSpecialAbility();
+        }
     }
 
     private void Move() {
-        Rigidbody.velocity = new Vector2(_moveDirection.x * MovementSpeed - SpaceResistance, _moveDirection.y * MovementSpeed);
+        Rigidbody.velocity = new Vector2(_moveDirection.x * _currentMovementSpeed - SpaceResistance, _moveDirection.y * _currentMovementSpeed);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -74,6 +109,25 @@ public class PlayerController : MonoBehaviour {
             
             Destroy(collision.gameObject);
         }
+    }
+
+    private void UseSpecialAbility() {
+
+        switch (_currentSpecialAbility) {
+            case SpecialAbility.None:
+                break;
+            case SpecialAbility.Star:
+                _currentStarDuration = StarDuration;
+                break;
+            case SpecialAbility.Blast:
+                break;
+            default:
+                Debug.LogError("Unknown Special Ability: " + _currentSpecialAbility);
+                break;
+        }
+
+        _currentSpecialAbility = SpecialAbility.None;
+        SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
     }
 }
 
