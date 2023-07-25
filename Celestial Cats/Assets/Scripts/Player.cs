@@ -2,19 +2,24 @@ using UnityEngine;
 
 // https://youtu.be/u8tot-X_RBI
 // https://www.techwithsach.com/post/how-to-add-a-simple-countdown-timer-in-unity
+// https://discussions.unity.com/t/how-to-keep-an-object-within-the-camera-view/117989
 
 public class Player : MonoBehaviour {
 
     public Rigidbody2D Rigidbody;
     public HealthComponent Health;
 
+    private InGameManager _manager;
+
     [Space]
     public float MovementSpeed = 1f;
     public float SpaceResistance = 0.5f;
     private float _currentMovementSpeed = 1f;
+    private Vector2 _moveDirection;
 
     [Space]
     public GameObject ProjectilePrefab;
+    public GameObject BlastPrefab;
     public float ProjectileOffset = 1f;
 
     [Space]
@@ -22,16 +27,20 @@ public class Player : MonoBehaviour {
     public float StarSpeed = 8f;
     private float _currentStarDuration = 0f;
 
-    private Vector2 _moveDirection;
+    [Space]
+    public float BlastDuration = 4f;
+    private float _currentBlastDuration = 0f;
+    private GameObject _blast;
 
     private SpecialAbility _currentSpecialAbility = SpecialAbility.None;
-    private float PowerupProgress = 0f;
+    private float _supernovaProgress = 0f;
 
-    public event System.Action<float> PowerupProgressChanged;
+    public event System.Action<float> SupernovaProgressChanged;
     public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
     private void Awake() {
         _currentMovementSpeed = MovementSpeed;
+        _manager = FindObjectOfType<InGameManager>();
     }
 
     // note to self: Update depends on framerate, good for processing input
@@ -54,6 +63,16 @@ public class Player : MonoBehaviour {
                 _currentMovementSpeed = MovementSpeed;
             }
         }
+
+        // update Blast special ability
+        if (_currentBlastDuration > 0f) {
+
+            _currentBlastDuration -= Time.deltaTime;
+
+            if (_currentBlastDuration <= 0f) {
+                Destroy(_blast);
+            }
+        }
     }
 
     // note to self: FixedUpdate happens a set amount of times per frame, good for physics calculations
@@ -71,23 +90,36 @@ public class Player : MonoBehaviour {
 
         // shoot projectile
         if (Input.GetButtonDown("Fire1")) {
-            Instantiate(ProjectilePrefab, new Vector2(gameObject.transform.position.x + ProjectileOffset, gameObject.transform.position.y), Quaternion.identity);
+            Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
         }
 
         // use special ability
         if (Input.GetButtonDown("Fire2") && _currentSpecialAbility != SpecialAbility.None) {
             UseSpecialAbility();
         }
+
+        // activate supernova
+        if (Input.GetButtonDown("Fire3") && _supernovaProgress == 100f) {
+            ActivateSupernova();
+        }
     }
 
     private void Move() {
+
         Rigidbody.velocity = new Vector2(_moveDirection.x * _currentMovementSpeed - SpaceResistance, _moveDirection.y * _currentMovementSpeed);
+
+        // keep the player on the screen
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+        pos.x = Mathf.Clamp01(pos.x);
+        pos.y = Mathf.Clamp01(pos.y);
+
+        transform.position = Camera.main.ViewportToWorldPoint(pos);
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
         
         // check if the other thing is a piece of the universe
-        // if so, increase powerup progress and eat the universe
+        // if so, increase supernova progress and eat the universe
         if (collision.gameObject.GetComponent<PieceOfTheUniverse>()) {
             
             // check if star
@@ -102,9 +134,13 @@ public class Player : MonoBehaviour {
                 SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
             }
             
-            else {
-                PowerupProgress++;
-                PowerupProgressChanged?.Invoke(PowerupProgress);
+            else if (_supernovaProgress < 100f) {
+
+                float add = collision.gameObject.GetComponent<PieceOfTheUniverse>().SupernovaValue;
+
+                _supernovaProgress = _supernovaProgress + add <= 100f ? _supernovaProgress + add : 100f;
+
+                SupernovaProgressChanged?.Invoke(_supernovaProgress);
             }
             
             Destroy(collision.gameObject);
@@ -120,6 +156,13 @@ public class Player : MonoBehaviour {
                 _currentStarDuration = StarDuration;
                 break;
             case SpecialAbility.Blast:
+                float blastWidth = _manager.CameraBottomRight.x - _manager.CameraBottomLeft.x;
+
+                _blast = Instantiate(BlastPrefab, new Vector2(transform.position.x + ProjectileOffset + blastWidth / 2f, transform.position.y), Quaternion.identity, transform);
+                _blast.transform.localScale = new Vector3(blastWidth, 0.5f, 1f);
+
+                _currentBlastDuration = BlastDuration;
+
                 break;
             default:
                 Debug.LogError("Unknown Special Ability: " + _currentSpecialAbility);
@@ -128,6 +171,11 @@ public class Player : MonoBehaviour {
 
         _currentSpecialAbility = SpecialAbility.None;
         SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
+    }
+
+    private void ActivateSupernova() {
+        _supernovaProgress = 0f;
+        SupernovaProgressChanged?.Invoke(_supernovaProgress);
     }
 }
 

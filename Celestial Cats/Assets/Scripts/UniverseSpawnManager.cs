@@ -2,20 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // https://docs.unity3d.com/ScriptReference/Random.Range.html
-// https://docs.unity3d.com/ScriptReference/Camera.ScreenToWorldPoint.html
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.InvokeRepeating.html
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.CancelInvoke.html
 // https://youtu.be/Hy6Gxtk0QwY
-
-/*
- * Screenspace:
- * 
- * 0,1--------------1,1
- * |                  |
- * |                  |
- * |                  |
- * 0,0---------------1,0
- */
 
 public class UniverseSpawnManager : MonoBehaviour {
 
@@ -27,23 +16,12 @@ public class UniverseSpawnManager : MonoBehaviour {
 
     private float _weightOfTheUniverse = 0f;
 
-    private Camera _mainCamera;
-    private Vector3 _cameraUpperRight;
-    private Vector3 _cameraBottomRight;
-
     private void Awake() {
         Manager.GameBegan += Manager_GameBegan;
         Manager.GameEnded += Manager_GameEnded;
-    }
-
-    private void Start() {
-        _mainCamera = Camera.main;
-
-        _cameraUpperRight = _mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
-        _cameraBottomRight = _mainCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0));
 
         CalculateWeights();
-    }
+    }   
 
     private void OnDisable() {
         Manager.GameBegan -= Manager_GameBegan;
@@ -69,8 +47,8 @@ public class UniverseSpawnManager : MonoBehaviour {
 
     private void SpawnTheUniverse() {
 
-        float spawnX = _cameraUpperRight.x + 10.0f;
-        float spawnY = Random.Range(_cameraBottomRight.y, _cameraUpperRight.y);
+        float spawnX = Manager.CameraUpperRight.x + 10.0f;
+        float spawnY = Random.Range(Manager.CameraBottomRight.y, Manager.CameraUpperRight.y);
 
         // randomly select universe bit to spawn
         float random = Random.Range(0f, 100f);

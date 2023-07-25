@@ -11,7 +11,7 @@ public class HUDController : MonoBehaviour {
     public Sprite Blast;
 
     [Space]
-    public TextMeshProUGUI PowerupProgressText;
+    public Slider SuperNovaProgress;
     public Image SpecialAbilityIcon;
 
     private Player _player;
@@ -19,7 +19,6 @@ public class HUDController : MonoBehaviour {
     private void Awake() {
         Manager.GameBegan += Manager_GameBegan;
 
-        PowerupProgressText.text = 0.ToString();
         SpecialAbilityIcon.gameObject.SetActive(false);
     }
 
@@ -27,19 +26,19 @@ public class HUDController : MonoBehaviour {
         Manager.GameBegan -= Manager_GameBegan;
         
         if (_player) {
-            _player.PowerupProgressChanged -= Player_PowerupProgressChanged;
+            _player.SupernovaProgressChanged -= Player_PowerupProgressChanged;
             _player.SpecialAbilityChanged -= Player_SpecialAbilityChanged;
         }
     }
 
     private void Manager_GameBegan(Player player) {
         _player = player;
-        _player.PowerupProgressChanged += Player_PowerupProgressChanged;
+        _player.SupernovaProgressChanged += Player_PowerupProgressChanged;
         _player.SpecialAbilityChanged += Player_SpecialAbilityChanged;
     }
 
     private void Player_PowerupProgressChanged(float newProgress) {
-        PowerupProgressText.text = newProgress.ToString();
+        SuperNovaProgress.value = newProgress;
     }
 
     private void Player_SpecialAbilityChanged(SpecialAbility newSpecialAbility) {

@@ -152,6 +152,7 @@ MonoBehaviour:
   MovementSpeed: 5
   SpaceResistance: 3
   ProjectilePrefab: {fileID: 1396993254563410421, guid: 6e0086ecee9e5d3438427f4ad1322fcf, type: 3}
+  BlastPrefab: {fileID: 6504038226328518996, guid: c15e80054e50e184290e47feaaba47ae, type: 3}
   ProjectileOffset: 1
   StarDuration: 2
   StarSpeed: 8
@@ -168,3 +169,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 100
+  CanBeDamaged: 1
