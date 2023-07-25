@@ -17,22 +17,22 @@ public class UniverseSpawnManager : MonoBehaviour {
     private float _weightOfTheUniverse = 0f;
 
     private void Awake() {
-        Manager.GameBegan += Manager_GameBegan;
-        Manager.GameEnded += Manager_GameEnded;
+        Manager.LevelBegan += Manager_LevelBegan;
+        Manager.LevelWon += Manager_LevelWon;
 
         CalculateWeights();
     }   
 
     private void OnDisable() {
-        Manager.GameBegan -= Manager_GameBegan;
-        Manager.GameEnded -= Manager_GameEnded;
+        Manager.LevelBegan -= Manager_LevelBegan;
+        Manager.LevelWon -= Manager_LevelWon;
     }
 
-    private void Manager_GameBegan(Player player) {
+    private void Manager_LevelBegan(Player player) {
         InvokeRepeating(nameof(SpawnTheUniverse), 0.0f, UniverseSpawnRate);
     }
 
-    private void Manager_GameEnded() {
+    private void Manager_LevelWon() {
         CancelInvoke();
     }    
 

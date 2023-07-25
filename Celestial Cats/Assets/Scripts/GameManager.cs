@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
     public string MainMenuSceneName;
-    public string GameSceneName;
-   // public string EndSceneName;
+
+    [Space]
+    public List<string> LevelNames = new();
+    private int _currentLevelIndex = 0;
 
     [Space]
     public GameObject LoadingScreenCanvas;
@@ -20,17 +23,24 @@ public class GameManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void PlayGame() {
-        StartCoroutine(LoadScene_Coroutine(GameSceneName));
+    public void PlayGame(int levelIndex = 0) {
+        _currentLevelIndex = levelIndex;
+        StartCoroutine(LoadScene_Coroutine(LevelNames[_currentLevelIndex]));
+    }
+
+    public bool HasNextLevel() {
+        return _currentLevelIndex + 1 < LevelNames.Count;
+    }
+
+    public void PlayNextLevel() {
+        if (HasNextLevel()) {
+            PlayGame(_currentLevelIndex + 1);
+        }
     }
 
     public void GoToMainMenu() {
         StartCoroutine(LoadScene_Coroutine(MainMenuSceneName));
     }
-
-   /* public void EndGame() {
-        StartCoroutine(LoadScene_Coroutine(EndSceneName));
-    }*/
 
     private IEnumerator LoadScene_Coroutine(string scene) {
 
@@ -61,8 +71,6 @@ public class GameManager : MonoBehaviour {
     }
 
     public void QuitGame() {
-
-        // to do: make sure to save which pages the player has seen
 
 #if UNITY_EDITOR
         Debug.Log("Game quit!");

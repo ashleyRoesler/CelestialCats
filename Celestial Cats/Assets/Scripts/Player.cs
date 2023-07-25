@@ -45,17 +45,29 @@ public class Player : MonoBehaviour {
     private float _currentSupernovaDuration = 0f;
     private List<GameObject> SpawnedClones = new();
 
+    private bool _inputEnabled = true;
+
     public event System.Action<float> SupernovaProgressChanged;
     public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
     private void Awake() {
         _currentMovementSpeed = MovementSpeed;
         _manager = FindObjectOfType<InGameManager>();
+
+        _manager.LevelWon += Manager_LevelWon;
+    }
+
+    private void Manager_LevelWon() {
+        _inputEnabled = false;
+        _currentMovementSpeed = 0f;
     }
 
     // note to self: Update depends on framerate, good for processing input
     private void Update() {
-        HandleInput();
+
+        if (_inputEnabled) {
+            HandleInput();
+        }
 
         // update Star duration
         if (_currentStarDuration > 0f) {

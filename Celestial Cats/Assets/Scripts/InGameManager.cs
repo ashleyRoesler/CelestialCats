@@ -27,8 +27,8 @@ public class InGameManager : MonoBehaviour {
 
     private bool _gameIsRunning = false;
 
-    public event System.Action<Player> GameBegan;
-    public event System.Action GameEnded;
+    public event System.Action<Player> LevelBegan;
+    public event System.Action LevelWon;
 
     private Player _player;
 
@@ -56,23 +56,23 @@ public class InGameManager : MonoBehaviour {
 
             // end level
             if (CurrentLevelDuration >= LevelDuration * 60f) {
-
+                WinLevel();
             }
         }
     }
 
-    public void BeginGame() {
+    public void BeginLevel() {
 
         Cursor.visible = false;
 
         _player = Instantiate(PlayerPrefab, new Vector2(PlayerSpawnPoint.transform.position.x, PlayerSpawnPoint.transform.position.y), Quaternion.identity).GetComponent<Player>();
 
         _gameIsRunning = true;
-        GameBegan?.Invoke(_player);
+        LevelBegan?.Invoke(_player);
     }
 
-    public void EndGame() {
+    public void WinLevel() {
         _gameIsRunning = false;
-        GameEnded?.Invoke();
+        LevelWon?.Invoke();
     }
 }
