@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 
 public class HUDController : MonoBehaviour {
 
@@ -14,12 +13,21 @@ public class HUDController : MonoBehaviour {
     public Slider SuperNovaProgress;
     public Image SpecialAbilityIcon;
 
+    [Space]
+    public Slider LevelProgress;
+
     private Player _player;
 
     private void Awake() {
         Manager.GameBegan += Manager_GameBegan;
 
         SpecialAbilityIcon.gameObject.SetActive(false);
+
+        LevelProgress.maxValue = Manager.LevelDuration * 60f;
+    }
+
+    private void Update() {
+        LevelProgress.value = Manager.CurrentLevelDuration;
     }
 
     private void OnDisable() {
