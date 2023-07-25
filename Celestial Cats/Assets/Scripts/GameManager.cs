@@ -10,7 +10,9 @@ public class GameManager : MonoBehaviour {
 
     [Space]
     public List<string> LevelNames = new();
-    private int _currentLevelIndex = 0;
+
+    private static int _currentLevelIndex = 0;
+    public static int LastLevelWon = -1;
 
     [Space]
     public GameObject LoadingScreenCanvas;
@@ -77,5 +79,11 @@ public class GameManager : MonoBehaviour {
 #endif
 
         Application.Quit();
+    }
+
+    public void CurrentLevelWon() {
+        if (LastLevelWon < _currentLevelIndex) {
+            LastLevelWon = _currentLevelIndex;
+        }
     }
 }

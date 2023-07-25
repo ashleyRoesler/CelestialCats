@@ -73,6 +73,9 @@ public class InGameManager : MonoBehaviour {
 
     public void WinLevel() {
         _gameIsRunning = false;
+
+        FindObjectOfType<GameManager>().CurrentLevelWon();
+
         LevelWon?.Invoke();
     }
 }
