@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 // https://youtu.be/u8tot-X_RBI
 // https://www.techwithsach.com/post/how-to-add-a-simple-countdown-timer-in-unity
@@ -35,6 +36,15 @@ public class Player : MonoBehaviour {
     private SpecialAbility _currentSpecialAbility = SpecialAbility.None;
     private float _supernovaProgress = 0f;
 
+    [Space]
+    public List<Transform> NovaCloneSpawnPositions = new();
+    public GameObject ClonePrefab;
+    public SpriteRenderer SpriteRenderer;
+    public float SupernovaDuration = 4f;
+    public float NovaSpeed = 8f;
+    private float _currentSupernovaDuration = 0f;
+    private List<GameObject> SpawnedClones = new();
+
     public event System.Action<float> SupernovaProgressChanged;
     public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
@@ -47,12 +57,6 @@ public class Player : MonoBehaviour {
     private void Update() {
         HandleInput();
 
-        // start Star special ability
-        if (_currentStarDuration == StarDuration) {
-            Health.CanBeDamaged = false;
-            _currentMovementSpeed = StarSpeed;
-        }
-
         // update Star duration
         if (_currentStarDuration > 0f) {
 
@@ -64,13 +68,34 @@ public class Player : MonoBehaviour {
             }
         }
 
-        // update Blast special ability
+        // update Blast duration
         if (_currentBlastDuration > 0f) {
 
             _currentBlastDuration -= Time.deltaTime;
 
             if (_currentBlastDuration <= 0f) {
                 Destroy(_blast);
+            }
+        }
+
+        // update Supernova duration
+        if (_currentSupernovaDuration > 0f) {
+
+            _currentSupernovaDuration -= Time.deltaTime;
+
+            if (_currentSupernovaDuration <= 0f) {
+
+                foreach(GameObject clone in SpawnedClones) {
+                    Destroy(clone);
+                }
+
+                Color a = SpriteRenderer.color;
+                a.a = 1f;
+
+                SpriteRenderer.color = a;
+
+                Health.CanBeDamaged = true;
+                _currentMovementSpeed = MovementSpeed;
             }
         }
     }
@@ -88,19 +113,22 @@ public class Player : MonoBehaviour {
 
         _moveDirection = new Vector2(moveX, moveY).normalized;
 
-        // shoot projectile
-        if (Input.GetButtonDown("Fire1")) {
-            Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
-        }
+        if (_currentSupernovaDuration <= 0f) {
 
-        // use special ability
-        if (Input.GetButtonDown("Fire2") && _currentSpecialAbility != SpecialAbility.None) {
-            UseSpecialAbility();
-        }
+            // shoot projectile
+            if (Input.GetButtonDown("Fire1")) {
+                Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
+            }
 
-        // activate supernova
-        if (Input.GetButtonDown("Fire3") && _supernovaProgress == 100f) {
-            ActivateSupernova();
+            // use special ability
+            if (Input.GetButtonDown("Fire2") && _currentSpecialAbility != SpecialAbility.None) {
+                UseSpecialAbility();
+            }
+
+            // activate supernova
+            if (Input.GetButtonDown("Fire3") && _supernovaProgress == 100f) {
+                ActivateSupernova();
+            }
         }
     }
 
@@ -153,13 +181,18 @@ public class Player : MonoBehaviour {
             case SpecialAbility.None:
                 break;
             case SpecialAbility.Star:
+                Health.CanBeDamaged = false;
+                _currentMovementSpeed = StarSpeed;
                 _currentStarDuration = StarDuration;
                 break;
             case SpecialAbility.Blast:
-                float blastWidth = _manager.CameraBottomRight.x - _manager.CameraBottomLeft.x;
 
-                _blast = Instantiate(BlastPrefab, new Vector2(transform.position.x + ProjectileOffset + blastWidth / 2f, transform.position.y), Quaternion.identity, transform);
-                _blast.transform.localScale = new Vector3(blastWidth, 0.5f, 1f);
+                if (!_blast) {
+                    float blastWidth = _manager.CameraBottomRight.x - _manager.CameraBottomLeft.x;
+
+                    _blast = Instantiate(BlastPrefab, new Vector2(transform.position.x + ProjectileOffset + blastWidth / 2f, transform.position.y), Quaternion.identity, transform);
+                    _blast.transform.localScale = new Vector3(blastWidth, 0.5f, 1f);
+                }
 
                 _currentBlastDuration = BlastDuration;
 
@@ -174,6 +207,24 @@ public class Player : MonoBehaviour {
     }
 
     private void ActivateSupernova() {
+
+        // turn player invisible
+        Color a = SpriteRenderer.color;
+        a.a = 0f;
+
+        SpriteRenderer.color = a;
+
+        // spawn clones
+        foreach(Transform spawnPoint in NovaCloneSpawnPositions) {
+            GameObject clone = Instantiate(ClonePrefab, spawnPoint);
+            SpawnedClones.Add(clone);
+        }
+
+        // apply Star ability effects
+        Health.CanBeDamaged = false;
+        _currentMovementSpeed = NovaSpeed;
+        _currentSupernovaDuration = SupernovaDuration;
+
         _supernovaProgress = 0f;
         SupernovaProgressChanged?.Invoke(_supernovaProgress);
     }
