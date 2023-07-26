@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public class ProjectileController : MonoBehaviour {
+public class Projectile : MonoBehaviour {
 
     public Rigidbody2D Rigidbody;
 
-    public float MovementSpeed = 4.0f;
+    public float DamageAmount = 5f;
+    public float MovementSpeed = 4f;
+
+    public bool DestroyOnHit = true;
 
     private void FixedUpdate() {
         Move();

@@ -1,37 +1,20 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-// https://youtu.be/u8tot-X_RBI
 // https://www.techwithsach.com/post/how-to-add-a-simple-countdown-timer-in-unity
-// https://discussions.unity.com/t/how-to-keep-an-object-within-the-camera-view/117989
 
-public class Player : MonoBehaviour {
-
-    public Rigidbody2D Rigidbody;
-    public HealthComponent Health;
-
-    private InGameManager _manager;
+public class Player : Character {
 
     [Space]
-    public float MovementSpeed = 1f;
-    public float SpaceResistance = 0.5f;
-    private float _currentMovementSpeed = 1f;
-    private Vector2 _moveDirection;
-
-    [Space]
-    public GameObject ProjectilePrefab;
     public GameObject BlastPrefab;
-    public float ProjectileOffset = 1f;
+    public float BlastDuration = 4f;
+    private float _currentBlastDuration = 0f;
+    private GameObject _blast;
 
     [Space]
     public float StarDuration = 4f;
     public float StarSpeed = 8f;
     private float _currentStarDuration = 0f;
-
-    [Space]
-    public float BlastDuration = 4f;
-    private float _currentBlastDuration = 0f;
-    private GameObject _blast;
 
     private SpecialAbility _currentSpecialAbility = SpecialAbility.None;
     private float _supernovaProgress = 0f;
@@ -50,16 +33,9 @@ public class Player : MonoBehaviour {
     public event System.Action<float> SupernovaProgressChanged;
     public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
-    private void Awake() {
-        _currentMovementSpeed = MovementSpeed;
-        _manager = FindObjectOfType<InGameManager>();
-
-        _manager.LevelWon += Manager_LevelWon;
-    }
-
-    private void Manager_LevelWon() {
+    protected override void Manager_LevelWon() {
+        base.Manager_LevelWon();
         _inputEnabled = false;
-        _currentMovementSpeed = 0f;
     }
 
     // note to self: Update depends on framerate, good for processing input
@@ -76,7 +52,7 @@ public class Player : MonoBehaviour {
 
             if (_currentStarDuration <= 0f) {
                 Health.CanBeDamaged = true;
-                _currentMovementSpeed = MovementSpeed;
+                currentMovementSpeed = MovementSpeed;
             }
         }
 
@@ -107,14 +83,9 @@ public class Player : MonoBehaviour {
                 SpriteRenderer.color = a;
 
                 Health.CanBeDamaged = true;
-                _currentMovementSpeed = MovementSpeed;
+                currentMovementSpeed = MovementSpeed;
             }
         }
-    }
-
-    // note to self: FixedUpdate happens a set amount of times per frame, good for physics calculations
-    private void FixedUpdate() {
-        Move();
     }
 
     private void HandleInput() {
@@ -123,13 +94,13 @@ public class Player : MonoBehaviour {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        _moveDirection = new Vector2(moveX, moveY).normalized;
+        moveDirection = new Vector2(moveX, moveY).normalized;
 
         if (_currentSupernovaDuration <= 0f) {
 
             // shoot projectile
             if (Input.GetButtonDown("Fire1")) {
-                Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
+                Shoot();
             }
 
             // use special ability
@@ -142,22 +113,12 @@ public class Player : MonoBehaviour {
                 ActivateSupernova();
             }
         }
-    }
+    }    
 
-    private void Move() {
+    protected override void OnTriggerEnter2D(Collider2D collision) {
 
-        Rigidbody.velocity = new Vector2(_moveDirection.x * _currentMovementSpeed - SpaceResistance, _moveDirection.y * _currentMovementSpeed);
+        base.OnTriggerEnter2D(collision);
 
-        // keep the player on the screen
-        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
-        pos.x = Mathf.Clamp01(pos.x);
-        pos.y = Mathf.Clamp01(pos.y);
-
-        transform.position = Camera.main.ViewportToWorldPoint(pos);
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision) {
-        
         // check if the other thing is a piece of the universe
         // if so, increase supernova progress and eat the universe
         if (collision.gameObject.GetComponent<PieceOfTheUniverse>()) {
@@ -194,13 +155,13 @@ public class Player : MonoBehaviour {
                 break;
             case SpecialAbility.Star:
                 Health.CanBeDamaged = false;
-                _currentMovementSpeed = StarSpeed;
+                currentMovementSpeed = StarSpeed;
                 _currentStarDuration = StarDuration;
                 break;
             case SpecialAbility.Blast:
 
                 if (!_blast) {
-                    float blastWidth = _manager.CameraBottomRight.x - _manager.CameraBottomLeft.x;
+                    float blastWidth = manager.CameraBottomRight.x - manager.CameraBottomLeft.x;
 
                     _blast = Instantiate(BlastPrefab, new Vector2(transform.position.x + ProjectileOffset + blastWidth / 2f, transform.position.y), Quaternion.identity, transform);
                     _blast.transform.localScale = new Vector3(blastWidth, 0.5f, 1f);
@@ -234,11 +195,17 @@ public class Player : MonoBehaviour {
 
         // apply Star ability effects
         Health.CanBeDamaged = false;
-        _currentMovementSpeed = NovaSpeed;
+        currentMovementSpeed = NovaSpeed;
         _currentSupernovaDuration = SupernovaDuration;
 
         _supernovaProgress = 0f;
         SupernovaProgressChanged?.Invoke(_supernovaProgress);
+    }
+
+    protected override void Die() {
+        // reset everything
+        // tell ingame manager that you died
+        // show death screen
     }
 }
 
