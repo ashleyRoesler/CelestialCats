@@ -50,7 +50,7 @@ public abstract class Character : MonoBehaviour {
         transform.position = Camera.main.ViewportToWorldPoint(pos);
     }
 
-    protected void Shoot() {
+    public void Shoot() {
         Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
     }
 

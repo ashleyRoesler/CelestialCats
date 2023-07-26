@@ -11,14 +11,18 @@ public class HealthComponent : MonoBehaviour {
     [HideInInspector]
     public bool CanBeDamaged = true;
 
+    public event System.Action<float> HealthChanged;
+
     private void Awake() {
         _currentHealth = MaxHealth;
     }
 
     public void TakeDamage(float amount) {
-        if (CanBeDamaged) {
+        if (CanBeDamaged && !IsDead) {
             _currentHealth = _currentHealth - amount < 0f ? 0f : _currentHealth - amount;
             IsDead = _currentHealth == 0;
+
+            HealthChanged?.Invoke(_currentHealth);
         }
     }
 }

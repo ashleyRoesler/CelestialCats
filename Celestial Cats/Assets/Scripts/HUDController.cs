@@ -6,6 +6,8 @@ public class HUDController : MonoBehaviour {
     public InGameManager Manager;
     private GameManager _manager;
 
+    public Slider PlayerHealth;
+
     [Space]
     public Sprite Star;
     public Sprite Blast;
@@ -60,6 +62,7 @@ public class HUDController : MonoBehaviour {
         _player = player;
         _player.SupernovaProgressChanged += Player_PowerupProgressChanged;
         _player.SpecialAbilityChanged += Player_SpecialAbilityChanged;
+        _player.Health.HealthChanged += Player_HealthChanged;
     }
 
     private void Manager_LevelWon() {
@@ -90,5 +93,9 @@ public class HUDController : MonoBehaviour {
                 SpecialAbilityIcon.gameObject.SetActive(false);
                 break;
         }
+    }
+
+    private void Player_HealthChanged(float newHealth) {
+        PlayerHealth.value = newHealth / _player.Health.MaxHealth;
     }
 }
