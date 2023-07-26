@@ -265,20 +265,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Manager: {fileID: 165492798}
   UniverseBits:
-  - Prefab: {fileID: 4487273729108077730, guid: 02210c24ad617e2459a6ab7151641efa, type: 3}
-    SpawnChance: 40
-    _weight: 0
-  - Prefab: {fileID: 4487273729108077730, guid: f6a1e6503d285644bae7c63cb886b560, type: 3}
+  - Prefab: {fileID: 4487273729108077730, guid: 6783e948b83062440b55e9b0cb44cd77, type: 3}
     SpawnChance: 10
     _weight: 0
-  - Prefab: {fileID: 4487273729108077730, guid: 317ee38175183634d96e2d12e4f5cf8c, type: 3}
+  - Prefab: {fileID: 4487273729108077730, guid: 7e1758ac7f8ddc746b988131e09f2ebb, type: 3}
+    SpawnChance: 10
+    _weight: 0
+  - Prefab: {fileID: 4487273729108077730, guid: 8a78c0aff23e99b43bf4b3350356e828, type: 3}
+    SpawnChance: 10
+    _weight: 0
+  - Prefab: {fileID: 4487273729108077730, guid: 6519d115e16ab174cab64729a700303a, type: 3}
     SpawnChance: 20
+    _weight: 0
+  - Prefab: {fileID: 4487273729108077730, guid: 229da619c1a9f1c468eb612b7a350086, type: 3}
+    SpawnChance: 20
+    _weight: 0
+  - Prefab: {fileID: 4487273729108077730, guid: 317ee38175183634d96e2d12e4f5cf8c, type: 3}
+    SpawnChance: 10
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: c47be7a2bf231e24f836d763d554cf44, type: 3}
     SpawnChance: 10
     _weight: 0
-  - Prefab: {fileID: 4487273729108077730, guid: 6783e948b83062440b55e9b0cb44cd77, type: 3}
-    SpawnChance: 20
+  - Prefab: {fileID: 4487273729108077730, guid: f6a1e6503d285644bae7c63cb886b560, type: 3}
+    SpawnChance: 10
     _weight: 0
   UniverseSpawnRate: 1
 --- !u!1 &343932452

@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4487273729108077728}
   - component: {fileID: 4487273729108077731}
   - component: {fileID: 4487273729108077729}
-  - component: {fileID: 2882723998176298290}
+  - component: {fileID: -5374727871381397078}
   - component: {fileID: 5958192573508843804}
   m_Layer: 0
-  m_Name: Satellite
+  m_Name: Copper Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: dc1e386e5a281194fb53f7a90b2803ba, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e771884c89f93024884ab6691e145815, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -108,7 +108,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!58 &2882723998176298290
+--- !u!58 &-5374727871381397078
 CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,9 +121,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.025208354, y: 0.059583306}
+  m_Offset: {x: 0, y: 0.004451394}
   serializedVersion: 2
-  m_Radius: 0.58479166
+  m_Radius: 0.6172197
 --- !u!114 &5958192573508843804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,5 +137,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 4487273729108077729}
-  MovementSpeed: -8
-  SupernovaValue: 0
+  MovementSpeed: -2.5
+  SupernovaValue: 4
