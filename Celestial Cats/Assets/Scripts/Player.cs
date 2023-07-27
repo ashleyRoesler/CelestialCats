@@ -119,25 +119,39 @@ public class Player : Character {
 
         base.OnTriggerEnter2D(collision);
 
+        // check if the other thing is an enemy
+        if (collision.gameObject.GetComponent<Enemy>()) {
+
+            Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+
+            Health.TakeDamage(enemy.DamageAmount);
+
+            if (Health.IsDead) {
+                Die();
+            }
+        }
+
         // check if the other thing is a piece of the universe
         // if so, increase supernova progress and eat the universe
-        if (collision.gameObject.GetComponent<PieceOfTheUniverse>()) {
+        else if (collision.gameObject.GetComponent<PieceOfTheUniverse>()) {
+
+            PieceOfTheUniverse piece = collision.gameObject.GetComponent<PieceOfTheUniverse>();
             
             // check if star
-            if (collision.gameObject.name.ToLower().Contains("star") && _currentSpecialAbility != SpecialAbility.Star) {
+            if (piece.gameObject.name.ToLower().Contains("star") && _currentSpecialAbility != SpecialAbility.Star) {
                 _currentSpecialAbility = SpecialAbility.Star;
                 SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
             }
 
             // check if magic
-            else if (collision.gameObject.name.ToLower().Contains("satellite") && _currentSpecialAbility != SpecialAbility.Blast) {
+            else if (piece.gameObject.name.ToLower().Contains("satellite") && _currentSpecialAbility != SpecialAbility.Blast) {
                 _currentSpecialAbility = SpecialAbility.Blast;
                 SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
             }
             
             else if (_supernovaProgress < 100f) {
 
-                float add = collision.gameObject.GetComponent<PieceOfTheUniverse>().SupernovaValue;
+                float add = piece.SupernovaValue;
 
                 _supernovaProgress = _supernovaProgress + add <= 100f ? _supernovaProgress + add : 100f;
 

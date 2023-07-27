@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 165492797}
   - component: {fileID: 165492798}
   - component: {fileID: 165492799}
+  - component: {fileID: 165492800}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -188,12 +189,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Manager: {fileID: 165492798}
-  UniverseBits:
+  SpawnableObjects:
   - Prefab: {fileID: 4487273729108077730, guid: 6783e948b83062440b55e9b0cb44cd77, type: 3}
-    SpawnChance: 10
+    SpawnChance: 20
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: 7e1758ac7f8ddc746b988131e09f2ebb, type: 3}
-    SpawnChance: 10
+    SpawnChance: 15
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: 8a78c0aff23e99b43bf4b3350356e828, type: 3}
     SpawnChance: 10
@@ -202,18 +203,36 @@ MonoBehaviour:
     SpawnChance: 20
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: 229da619c1a9f1c468eb612b7a350086, type: 3}
-    SpawnChance: 20
+    SpawnChance: 15
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: 317ee38175183634d96e2d12e4f5cf8c, type: 3}
     SpawnChance: 10
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: c47be7a2bf231e24f836d763d554cf44, type: 3}
-    SpawnChance: 10
+    SpawnChance: 5
     _weight: 0
   - Prefab: {fileID: 4487273729108077730, guid: f6a1e6503d285644bae7c63cb886b560, type: 3}
-    SpawnChance: 10
+    SpawnChance: 5
     _weight: 0
-  UniverseSpawnRate: 1
+  SpawnRate: 1
+--- !u!114 &165492800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165492796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a83837d3fbab89549aae32a7a55ae2f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Manager: {fileID: 165492798}
+  SpawnableObjects:
+  - Prefab: {fileID: 6007637534038070112, guid: 0e6b1a48e035b8c44a0196f36a30aec2, type: 3}
+    SpawnChance: 100
+    _weight: 0
+  SpawnRate: 5
 --- !u!1001 &465609451
 PrefabInstance:
   m_ObjectHideFlags: 0

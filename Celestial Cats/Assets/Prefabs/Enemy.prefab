@@ -150,7 +150,7 @@ MonoBehaviour:
   Rigidbody: {fileID: 5307395678811388317}
   Health: {fileID: 8301325061662237542}
   MovementSpeed: 0
-  SpaceResistance: 0
+  SpaceResistance: 3
   ProjectilePrefab: {fileID: 1396993254563410421, guid: 8b7c40fe448078244bc0f71e336e0e5a, type: 3}
   ProjectileOffset: -1
 --- !u!114 &8301325061662237542
@@ -166,4 +166,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 1
+  IsDead: 0
   CanBeDamaged: 1

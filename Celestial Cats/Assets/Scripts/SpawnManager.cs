@@ -6,15 +6,15 @@ using UnityEngine;
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.CancelInvoke.html
 // https://youtu.be/Hy6Gxtk0QwY
 
-public class UniverseSpawnManager : MonoBehaviour {
+public class SpawnManager : MonoBehaviour {
 
     public InGameManager Manager;
 
     [Space]
-    public List<UniverseBit> UniverseBits = new();
-    public float UniverseSpawnRate = 1.0f;
+    public List<SpawnableObject> SpawnableObjects = new();
+    public float SpawnRate = 1.0f;
 
-    private float _weightOfTheUniverse = 0f;
+    private float _totalWeight = 0f;
 
     private void Awake() {
         Manager.LevelBegan += Manager_LevelBegan;
@@ -29,7 +29,7 @@ public class UniverseSpawnManager : MonoBehaviour {
     }
 
     private void Manager_LevelBegan(Player player) {
-        InvokeRepeating(nameof(SpawnTheUniverse), 0.0f, UniverseSpawnRate);
+        InvokeRepeating(nameof(SpawnTheUniverse), 0.0f, SpawnRate);
     }
 
     private void Manager_LevelWon() {
@@ -37,11 +37,11 @@ public class UniverseSpawnManager : MonoBehaviour {
     }    
 
     private void CalculateWeights() {
-        _weightOfTheUniverse = 0;
+        _totalWeight = 0;
 
-        foreach (UniverseBit b in UniverseBits) {
-            _weightOfTheUniverse += b.SpawnChance;
-            b._weight = _weightOfTheUniverse;
+        foreach (SpawnableObject b in SpawnableObjects) {
+            _totalWeight += b.SpawnChance;
+            b._weight = _totalWeight;
         }
     }
 
@@ -54,21 +54,21 @@ public class UniverseSpawnManager : MonoBehaviour {
         float random = Random.Range(0f, 100f);
         int spawnIndex = 0;
 
-        for (int i = 0; i < UniverseBits.Count; i++) {
+        for (int i = 0; i < SpawnableObjects.Count; i++) {
 
-            if (UniverseBits[i]._weight >= random) {
+            if (SpawnableObjects[i]._weight >= random) {
 
                 spawnIndex = i;
                 break;
             }
         }
 
-        Instantiate(UniverseBits[spawnIndex].Prefab, new Vector2(spawnX, spawnY), Quaternion.identity);
+        Instantiate(SpawnableObjects[spawnIndex].Prefab, new Vector2(spawnX, spawnY), Quaternion.identity);
     }
 }
 
 [System.Serializable]
-public class UniverseBit {
+public class SpawnableObject {
     public GameObject Prefab;
 
     [Range(0f, 100f)]
