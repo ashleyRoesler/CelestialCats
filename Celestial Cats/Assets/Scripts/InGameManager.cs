@@ -47,6 +47,12 @@ public class InGameManager : MonoBehaviour {
         CameraBottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0));
     }
 
+    private void OnDisable() {        
+        if (_player) {
+            _player.Revived -= Player_Revived;
+        }
+    }
+
     private void Update() {
         
         // update level duration
@@ -67,8 +73,14 @@ public class InGameManager : MonoBehaviour {
 
         _player = Instantiate(PlayerPrefab, new Vector2(PlayerSpawnPoint.transform.position.x, PlayerSpawnPoint.transform.position.y), Quaternion.identity).GetComponent<Player>();
 
+        _player.Revived += Player_Revived;
+
         _gameIsRunning = true;
         LevelBegan?.Invoke(_player);
+    }
+
+    private void Player_Revived() {
+        _player.transform.position = PlayerSpawnPoint.transform.position;
     }
 
     public void WinLevel() {

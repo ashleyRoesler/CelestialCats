@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 // https://www.techwithsach.com/post/how-to-add-a-simple-countdown-timer-in-unity
+// https://discussions.unity.com/t/how-to-keep-an-object-within-the-camera-view/117989
 
 public class Player : Character {
 
@@ -33,6 +34,9 @@ public class Player : Character {
     public event System.Action<float> SupernovaProgressChanged;
     public event System.Action<SpecialAbility> SpecialAbilityChanged;
 
+    public event System.Action Died;
+    public event System.Action Revived;    
+
     protected override void Manager_LevelWon() {
         base.Manager_LevelWon();
         _inputEnabled = false;
@@ -41,7 +45,7 @@ public class Player : Character {
     // note to self: Update depends on framerate, good for processing input
     private void Update() {
 
-        if (_inputEnabled) {
+        if (_inputEnabled && !Health.IsDead) {
             HandleInput();
         }
 
@@ -113,7 +117,18 @@ public class Player : Character {
                 ActivateSupernova();
             }
         }
-    }    
+    }
+
+    protected override void Move() {
+        base.Move();
+
+        // keep the player on the screen
+        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
+        pos.x = Mathf.Clamp01(pos.x);
+        pos.y = Mathf.Clamp01(pos.y);
+
+        transform.position = Camera.main.ViewportToWorldPoint(pos);
+    }
 
     protected override void OnTriggerEnter2D(Collider2D collision) {
 
@@ -124,10 +139,14 @@ public class Player : Character {
 
             Enemy enemy = collision.gameObject.GetComponent<Enemy>();
 
-            Health.TakeDamage(enemy.DamageAmount);
+            // take damage
+            if (Health.CanBeDamaged) {
+                Health.TakeDamage(enemy.DamageAmount);
+            }
 
-            if (Health.IsDead) {
-                Die();
+            // if invnincible, damage enemy
+            else {
+                enemy.Health.TakeDamage(DamageAmount);
             }
         }
 
@@ -217,9 +236,43 @@ public class Player : Character {
     }
 
     protected override void Die() {
-        // reset everything
-        // tell ingame manager that you died
-        // show death screen
+
+        // turn player invisible
+        Color a = SpriteRenderer.color;
+        a.a = 0f;
+
+        SpriteRenderer.color = a;
+
+        // reset blast
+        _currentBlastDuration = 0f;
+
+        if (_blast) {
+            Destroy(_blast);
+        }
+
+        // reset ability
+        _currentSpecialAbility = SpecialAbility.None;
+        SpecialAbilityChanged?.Invoke(_currentSpecialAbility);
+
+        // reset supernova
+        _supernovaProgress = 0f;
+        SupernovaProgressChanged?.Invoke(_supernovaProgress);
+
+        Died?.Invoke();
+    }
+
+    public void Revive() {
+        Health.Revive();
+
+        // turn player visible
+        Color a = SpriteRenderer.color;
+        a.a = 1f;
+
+        SpriteRenderer.color = a;
+
+        currentMovementSpeed = MovementSpeed;
+
+        Revived?.Invoke();
     }
 }
 

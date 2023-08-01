@@ -24,6 +24,10 @@ public class HUDController : MonoBehaviour {
     public Button ContinueButton;
     public Button MainMenuButton;
 
+    [Space]
+    public GameObject DeathScreen;
+    public Button MainMenuButton_Death;
+
     private Player _player;
 
     private void Awake() {
@@ -43,6 +47,10 @@ public class HUDController : MonoBehaviour {
         MainMenuButton.onClick.AddListener(() => {
             _manager.GoToMainMenu();
         });
+
+        MainMenuButton_Death.onClick.AddListener(() => {
+            _manager.GoToMainMenu();
+        });
     }
 
     private void Update() {
@@ -55,6 +63,7 @@ public class HUDController : MonoBehaviour {
         if (_player) {
             _player.SupernovaProgressChanged -= Player_PowerupProgressChanged;
             _player.SpecialAbilityChanged -= Player_SpecialAbilityChanged;
+            _player.Died -= Player_Died;
         }
     }
 
@@ -63,7 +72,8 @@ public class HUDController : MonoBehaviour {
         _player.SupernovaProgressChanged += Player_PowerupProgressChanged;
         _player.SpecialAbilityChanged += Player_SpecialAbilityChanged;
         _player.Health.HealthChanged += Player_HealthChanged;
-    }
+        _player.Died += Player_Died;
+    }    
 
     private void Manager_LevelWon() {
 
@@ -97,5 +107,16 @@ public class HUDController : MonoBehaviour {
 
     private void Player_HealthChanged(float newHealth) {
         PlayerHealth.value = newHealth / _player.Health.MaxHealth;
+    }
+
+    private void Player_Died() {
+        Cursor.visible = true;
+        DeathScreen.SetActive(true);
+    }
+
+    public void RevivePlayer() {
+        _player.Revive();
+        Cursor.visible = false;
+        DeathScreen.SetActive(false);
     }
 }

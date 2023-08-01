@@ -12,6 +12,7 @@ public class HealthComponent : MonoBehaviour {
     public bool CanBeDamaged = true;
 
     public event System.Action<float> HealthChanged;
+    public event System.Action Died;
 
     private void Awake() {
         _currentHealth = MaxHealth;
@@ -22,7 +23,18 @@ public class HealthComponent : MonoBehaviour {
             _currentHealth = _currentHealth - amount < 0f ? 0f : _currentHealth - amount;
             IsDead = _currentHealth == 0;
 
+            if (IsDead) {
+                Died?.Invoke();
+            }
+
             HealthChanged?.Invoke(_currentHealth);
         }
+    }
+
+    public void Revive() {
+        _currentHealth = MaxHealth;
+        IsDead = false;
+
+        HealthChanged?.Invoke(_currentHealth);
     }
 }

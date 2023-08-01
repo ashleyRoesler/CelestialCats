@@ -1,7 +1,6 @@
 using UnityEngine;
 
 // https://youtu.be/u8tot-X_RBI
-// https://discussions.unity.com/t/how-to-keep-an-object-within-the-camera-view/117989
 
 public abstract class Character : MonoBehaviour {
 
@@ -20,11 +19,24 @@ public abstract class Character : MonoBehaviour {
     public GameObject ProjectilePrefab;
     public float ProjectileOffset = 1f;
 
+    [Space]
+    public float DamageAmount = 10f;
+
     private void Awake() {
         currentMovementSpeed = MovementSpeed;
         manager = FindObjectOfType<InGameManager>();
 
         manager.LevelWon += Manager_LevelWon;
+        Health.Died += Health_Died;
+    }
+
+    private void OnDisable() {
+
+        if (manager) {
+            manager.LevelWon -= Manager_LevelWon;
+        }
+
+        Health.Died -= Health_Died;
     }
 
     // note to self: FixedUpdate happens a set amount of times per frame, good for physics calculations
@@ -38,16 +50,8 @@ public abstract class Character : MonoBehaviour {
         moveDirection = new Vector2(0, 0);
     }
 
-    protected void Move() {
-
+    protected virtual void Move() {
         Rigidbody.velocity = new Vector2(moveDirection.x * currentMovementSpeed - SpaceResistance, moveDirection.y * currentMovementSpeed);
-
-        // keep the character on the screen
-        Vector3 pos = Camera.main.WorldToViewportPoint(transform.position);
-        pos.x = Mathf.Clamp01(pos.x);
-        pos.y = Mathf.Clamp01(pos.y);
-
-        transform.position = Camera.main.ViewportToWorldPoint(pos);
     }
 
     public void Shoot() {
@@ -63,14 +67,14 @@ public abstract class Character : MonoBehaviour {
 
             Health.TakeDamage(p.DamageAmount);
 
-            if (Health.IsDead) {
-                Die();
-            }
-
             if (p.DestroyOnHit) {
                 Destroy(collision.gameObject);
             }
         }
+    }
+
+    private void Health_Died() {
+        Die();
     }
 
     protected abstract void Die();
