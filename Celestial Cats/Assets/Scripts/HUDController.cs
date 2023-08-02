@@ -4,7 +4,7 @@ using UnityEngine.UI;
 public class HUDController : MonoBehaviour {
 
     public InGameManager Manager;
-    private GameManager _manager;
+    private GameManager _gameManager;
 
     public Slider PlayerHealth;
 
@@ -28,28 +28,38 @@ public class HUDController : MonoBehaviour {
     public GameObject DeathScreen;
     public Button MainMenuButton_Death;
 
+    [Space]
+    public GameObject PauseMenu;
+    public Button MainMenuButton_Pause;
+
     private Player _player;
+    private bool _cursorShouldShow = true;
 
     private void Awake() {
         Manager.LevelBegan += Manager_LevelBegan;
         Manager.LevelWon += Manager_LevelWon;
+        Manager.PauseToggle += Manager_PauseToggle;
 
-        _manager = FindObjectOfType<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
 
         SpecialAbilityIcon.gameObject.SetActive(false);
 
         LevelProgress.maxValue = Manager.LevelDuration * 60f;
 
         ContinueButton.onClick.AddListener(() => {
-            _manager.PlayNextLevel();
+            _gameManager.PlayNextLevel();
         });
 
         MainMenuButton.onClick.AddListener(() => {
-            _manager.GoToMainMenu();
+            _gameManager.GoToMainMenu();
         });
 
         MainMenuButton_Death.onClick.AddListener(() => {
-            _manager.GoToMainMenu();
+            _gameManager.GoToMainMenu();
+        });
+
+        MainMenuButton_Pause.onClick.AddListener(() => {
+            _gameManager.GoToMainMenu();
         });
     }
 
@@ -59,7 +69,9 @@ public class HUDController : MonoBehaviour {
 
     private void OnDisable() {
         Manager.LevelBegan -= Manager_LevelBegan;
-        
+        Manager.LevelWon -= Manager_LevelWon;
+        Manager.PauseToggle -= Manager_PauseToggle;
+
         if (_player) {
             _player.SupernovaProgressChanged -= Player_PowerupProgressChanged;
             _player.SpecialAbilityChanged -= Player_SpecialAbilityChanged;
@@ -73,14 +85,27 @@ public class HUDController : MonoBehaviour {
         _player.SpecialAbilityChanged += Player_SpecialAbilityChanged;
         _player.Health.HealthChanged += Player_HealthChanged;
         _player.Died += Player_Died;
+
+        _cursorShouldShow = false;
     }    
 
     private void Manager_LevelWon() {
 
-        ContinueButton.gameObject.SetActive(_manager.HasNextLevel());
+        ContinueButton.gameObject.SetActive(_gameManager.HasNextLevel());
 
         WinScreen.SetActive(true);
         Cursor.visible = true;
+
+        _cursorShouldShow = true;
+    }
+
+    private void Manager_PauseToggle(bool isPaused) {
+        PauseMenu.SetActive(isPaused);
+        Cursor.visible = isPaused || _cursorShouldShow;
+    }
+
+    public void Resume() {
+        Manager.TogglePause();
     }
 
     private void Player_PowerupProgressChanged(float newProgress) {
@@ -112,11 +137,15 @@ public class HUDController : MonoBehaviour {
     private void Player_Died() {
         Cursor.visible = true;
         DeathScreen.SetActive(true);
+
+        _cursorShouldShow = true;
     }
 
     public void RevivePlayer() {
         _player.Revive();
         Cursor.visible = false;
         DeathScreen.SetActive(false);
+
+        _cursorShouldShow = false;
     }
 }

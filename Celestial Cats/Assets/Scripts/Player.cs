@@ -43,7 +43,12 @@ public class Player : Character {
     }
 
     // note to self: Update depends on framerate, good for processing input
+    // note to self: Update IS called when Time.timeScale == 0
     private void Update() {
+
+        if (InGameManager.IsPaused) {
+            return;
+        }
 
         if (_inputEnabled && !Health.IsDead) {
             HandleInput();

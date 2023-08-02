@@ -2,6 +2,7 @@ using UnityEngine;
 
 // https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
 // https://docs.unity3d.com/ScriptReference/Camera.ScreenToWorldPoint.html
+// https://gamedevbeginner.com/the-right-way-to-pause-the-game-in-unity/#pause_time_scale
 
 /*
  * Screenspace:
@@ -26,9 +27,11 @@ public class InGameManager : MonoBehaviour {
     public float CurrentLevelDuration = 0f;
 
     private bool _gameIsRunning = false;
+    public static bool IsPaused = false;
 
     public event System.Action<Player> LevelBegan;
     public event System.Action LevelWon;
+    public event System.Action<bool> PauseToggle;
 
     private Player _player;
 
@@ -39,7 +42,7 @@ public class InGameManager : MonoBehaviour {
     public Vector3 CameraBottomRight;
 
     [HideInInspector]
-    public Vector3 CameraBottomLeft;
+    public Vector3 CameraBottomLeft;   
 
     private void Start() {
         CameraUpperRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
@@ -55,6 +58,10 @@ public class InGameManager : MonoBehaviour {
 
     private void Update() {
         
+        if (Input.GetButtonDown("Pause")) {
+            TogglePause();
+        }
+
         // update level duration
         if (_gameIsRunning && CurrentLevelDuration < LevelDuration * 60f) {
 
@@ -89,5 +96,13 @@ public class InGameManager : MonoBehaviour {
         FindObjectOfType<GameManager>().CurrentLevelWon();
 
         LevelWon?.Invoke();
+    }
+
+    public void TogglePause() {
+        IsPaused = !IsPaused;
+
+        Time.timeScale = IsPaused ? 0f : 1f;
+
+        PauseToggle?.Invoke(IsPaused);
     }
 }

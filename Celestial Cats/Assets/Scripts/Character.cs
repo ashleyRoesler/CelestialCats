@@ -40,6 +40,7 @@ public abstract class Character : MonoBehaviour {
     }
 
     // note to self: FixedUpdate happens a set amount of times per frame, good for physics calculations
+    // note to self: FixedUpdate is NOT called when Time.timeScale == 0
     private void FixedUpdate() {
         Move();
     }
