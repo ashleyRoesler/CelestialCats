@@ -21,6 +21,8 @@ public class GameManager : MonoBehaviour {
     [Space]
     public float LoadTime = 1f;
 
+    public static bool CanBePaused = false;
+
     private void Awake() {
         DontDestroyOnLoad(gameObject);
     }
@@ -46,6 +48,7 @@ public class GameManager : MonoBehaviour {
 
     private IEnumerator LoadScene_Coroutine(string scene) {
 
+        CanBePaused = false;
         LoadingScreenCanvas.SetActive(true);
 
         Color c = LoadingScreen.color;
@@ -70,6 +73,7 @@ public class GameManager : MonoBehaviour {
         }
 
         LoadingScreenCanvas.SetActive(false);
+        CanBePaused = true;
     }
 
     public void QuitGame() {

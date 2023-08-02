@@ -58,7 +58,7 @@ public class InGameManager : MonoBehaviour {
 
     private void Update() {
         
-        if (Input.GetButtonDown("Pause")) {
+        if (GameManager.CanBePaused && Input.GetButtonDown("Pause")) {
             TogglePause();
         }
 
