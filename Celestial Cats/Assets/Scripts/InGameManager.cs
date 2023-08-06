@@ -58,7 +58,7 @@ public class InGameManager : MonoBehaviour {
 
     private void Update() {
         
-        if (GameManager.CanBePaused && Input.GetButtonDown("Pause")) {
+        if (GameManager.Instance.CanBePaused && Input.GetButtonDown("Pause")) {
             TogglePause();
         }
 
@@ -93,7 +93,7 @@ public class InGameManager : MonoBehaviour {
     public void WinLevel() {
         _gameIsRunning = false;
 
-        FindObjectOfType<GameManager>().CurrentLevelWon();
+        GameManager.Instance.CurrentLevelWon();
 
         LevelWon?.Invoke();
     }

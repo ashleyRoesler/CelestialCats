@@ -310,7 +310,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b1505190d73ae46b0e41d4e79fbc39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Manager: {fileID: 286135183}
   LevelButtons:
   - {fileID: 307979514}
   - {fileID: 913733512}
@@ -461,6 +460,7 @@ GameObject:
   m_Component:
   - component: {fileID: 286135184}
   - component: {fileID: 286135183}
+  - component: {fileID: 286135185}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -486,10 +486,11 @@ MonoBehaviour:
   - Level 1
   - Level 2
   - Level 3
-  LastUnlockedLevel: 0
+  LastLevelWon: -1
   LoadingScreenCanvas: {fileID: 796975729}
   LoadingScreen: {fileID: 2077931652}
   LoadTime: 2
+  CanBePaused: 0
 --- !u!4 &286135184
 Transform:
   m_ObjectHideFlags: 0
@@ -506,6 +507,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &286135185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286135182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ba391d1ca5219f4d8f471416c6f4d01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &307979512
 GameObject:
   m_ObjectHideFlags: 0

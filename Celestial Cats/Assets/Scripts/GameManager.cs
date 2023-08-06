@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour {
     public List<string> LevelNames = new();
 
     private static int _currentLevelIndex = 0;
-    public static int LastLevelWon = -1;
+
+    [HideInInspector]
+    public int LastLevelWon = -1;
 
     [Space]
     public GameObject LoadingScreenCanvas;
@@ -21,10 +23,20 @@ public class GameManager : MonoBehaviour {
     [Space]
     public float LoadTime = 1f;
 
-    public static bool CanBePaused = false;
+    [HideInInspector]
+    public bool CanBePaused = false;
+
+    public static GameManager Instance;
 
     private void Awake() {
         DontDestroyOnLoad(gameObject);
+
+        if (!Instance) {
+            Instance = this;
+        }
+        else {
+            Destroy(gameObject);
+        }
     }
 
     public void PlayGame(int levelIndex = 0) {
@@ -88,6 +100,8 @@ public class GameManager : MonoBehaviour {
     public void CurrentLevelWon() {
         if (LastLevelWon < _currentLevelIndex) {
             LastLevelWon = _currentLevelIndex;
+
+            SaveManager.Instance.Save();
         }
     }
 }

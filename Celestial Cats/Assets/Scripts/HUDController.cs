@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class HUDController : MonoBehaviour {
 
     public InGameManager Manager;
-    private GameManager _gameManager;
 
     public Slider PlayerHealth;
 
@@ -40,26 +39,24 @@ public class HUDController : MonoBehaviour {
         Manager.LevelWon += Manager_LevelWon;
         Manager.PauseToggle += Manager_PauseToggle;
 
-        _gameManager = FindObjectOfType<GameManager>();
-
         SpecialAbilityIcon.gameObject.SetActive(false);
 
         LevelProgress.maxValue = Manager.LevelDuration * 60f;
 
         ContinueButton.onClick.AddListener(() => {
-            _gameManager.PlayNextLevel();
+            GameManager.Instance.PlayNextLevel();
         });
 
         MainMenuButton.onClick.AddListener(() => {
-            _gameManager.GoToMainMenu();
+            GameManager.Instance.GoToMainMenu();
         });
 
         MainMenuButton_Death.onClick.AddListener(() => {
-            _gameManager.GoToMainMenu();
+            GameManager.Instance.GoToMainMenu();
         });
 
         MainMenuButton_Pause.onClick.AddListener(() => {
-            _gameManager.GoToMainMenu();
+            GameManager.Instance.GoToMainMenu();
         });
     }
 
@@ -91,7 +88,7 @@ public class HUDController : MonoBehaviour {
 
     private void Manager_LevelWon() {
 
-        ContinueButton.gameObject.SetActive(_gameManager.HasNextLevel());
+        ContinueButton.gameObject.SetActive(GameManager.Instance.HasNextLevel());
 
         WinScreen.SetActive(true);
         Cursor.visible = true;
