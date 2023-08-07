@@ -152,7 +152,12 @@ MonoBehaviour:
   MovementSpeed: 0
   SpaceResistance: 3
   ProjectilePrefab: {fileID: 1396993254563410421, guid: 8b7c40fe448078244bc0f71e336e0e5a, type: 3}
-  ProjectileOffset: -1
+  ProjectileOffset: 1
+  DamageAmount: 10
+  Team: 1
+  MovementType: 0
+  ProjectileType: 3
+  FiringRate: 0.5
 --- !u!114 &8301325061662237542
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -105,4 +105,8 @@ public class InGameManager : MonoBehaviour {
 
         PauseToggle?.Invoke(IsPaused);
     }
+
+    public Vector3 GetPlayerPosition() {
+        return _player.transform.position;
+    }
 }

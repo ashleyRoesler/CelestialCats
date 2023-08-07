@@ -135,6 +135,10 @@ public class Player : Character {
         transform.position = Camera.main.ViewportToWorldPoint(pos);
     }
 
+    protected override void Shoot() {
+        Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
+    }
+
     protected override void OnTriggerEnter2D(Collider2D collision) {
 
         base.OnTriggerEnter2D(collision);

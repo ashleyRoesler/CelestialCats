@@ -17,10 +17,15 @@ public abstract class Character : MonoBehaviour {
 
     [Space]
     public GameObject ProjectilePrefab;
+
+    [Min(0)]
     public float ProjectileOffset = 1f;
 
     [Space]
     public float DamageAmount = 10f;
+
+    [Header("0 = Player, 1 = Enemy"), Range(0, 1)]
+    public int Team = 0;
 
     private void Awake() {
         currentMovementSpeed = MovementSpeed;
@@ -30,7 +35,7 @@ public abstract class Character : MonoBehaviour {
         Health.Died += Health_Died;
     }
 
-    private void OnDisable() {
+    protected virtual void OnDisable() {
 
         if (manager) {
             manager.LevelWon -= Manager_LevelWon;
@@ -55,9 +60,7 @@ public abstract class Character : MonoBehaviour {
         Rigidbody.velocity = new Vector2(moveDirection.x * currentMovementSpeed - SpaceResistance, moveDirection.y * currentMovementSpeed);
     }
 
-    public void Shoot() {
-        Instantiate(ProjectilePrefab, new Vector2(transform.position.x + ProjectileOffset, transform.position.y), Quaternion.identity);
-    }
+    protected abstract void Shoot();
 
     protected virtual void OnTriggerEnter2D(Collider2D collision) {
         
@@ -66,10 +69,12 @@ public abstract class Character : MonoBehaviour {
 
             Projectile p = collision.gameObject.GetComponent<Projectile>();
 
-            Health.TakeDamage(p.DamageAmount);
+            if (p.Team != Team) {
+                Health.TakeDamage(p.DamageAmount);
 
-            if (p.DestroyOnHit) {
-                Destroy(collision.gameObject);
+                if (p.DestroyOnHit) {
+                    Destroy(collision.gameObject);
+                }
             }
         }
     }

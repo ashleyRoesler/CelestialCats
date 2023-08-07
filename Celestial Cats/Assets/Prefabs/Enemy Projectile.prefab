@@ -137,4 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 6623221132186451547}
-  MovementSpeed: -7
+  DamageAmount: 5
+  MovementSpeed: 7
+  MoveDirection: {x: 1, y: 0}
+  DestroyOnHit: 1
+  Team: 1

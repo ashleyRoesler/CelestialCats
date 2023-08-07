@@ -29,7 +29,7 @@ public class SpawnManager : MonoBehaviour {
     }
 
     private void Manager_LevelBegan(Player player) {
-        InvokeRepeating(nameof(SpawnTheUniverse), 0.0f, SpawnRate);
+        InvokeRepeating(nameof(SpawnTheUniverse), 0f, SpawnRate);
     }
 
     private void Manager_LevelWon() {
