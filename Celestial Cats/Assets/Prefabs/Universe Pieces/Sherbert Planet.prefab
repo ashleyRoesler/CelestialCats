@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5374727871381397078}
   - component: {fileID: 5958192573508843804}
   m_Layer: 0
-  m_Name: Orange Planet
+  m_Name: Sherbert Planet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: c5680ec8dd6564a42b661c82cb41e9e7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 650cbec4b42eb2a4bbd356ae4c73ca01, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.33, y: 1.33}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -121,9 +121,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.013354152, y: 0.04451382}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.40355334
+  m_Radius: 0.33381516
 --- !u!114 &5958192573508843804
 MonoBehaviour:
   m_ObjectHideFlags: 0

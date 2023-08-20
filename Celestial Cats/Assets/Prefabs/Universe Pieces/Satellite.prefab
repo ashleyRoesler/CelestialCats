@@ -121,7 +121,7 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.025208354, y: 0.059583306}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.58479166
 --- !u!114 &5958192573508843804
@@ -137,5 +137,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Rigidbody: {fileID: 4487273729108077729}
-  MovementSpeed: -8
+  MovementSpeed: -7
   SupernovaValue: 0
